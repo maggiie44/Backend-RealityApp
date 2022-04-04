@@ -82,7 +82,7 @@ router.post('/', async (req, res, next)=> {
         }
     };
 
-    // await newRecord.save();
+    await newRecord.save();
     // records.push(newRecord);
     return res.status(201).send(newRecord);
 });
