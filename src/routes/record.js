@@ -1,15 +1,18 @@
 const express = require('express');
 const Joi = require('joi');
 
-const RecordModel = require('../models/record')
+const RecordModel = require('../models/record');
+const UserModel = require('../models/userModel');
 
-const createRequestSchema = Joi.object( {
-    activityName: Joi.string().required(),
-    timestamp: Joi.string().required(),
-    duration: Joi.number().min(0).required(),
-    calories: Joi.number().min(0),
-    description: Joi.string().allow(''),
-})
+const userId = '624c1385419c27f8b3217645';
+
+// const createRequestSchema = Joi.object( {
+//     activityName: Joi.string().required(),
+//     timestamp: Joi.string().required(),
+//     duration: Joi.number().min(0).required(),
+//     calories: Joi.number().min(0),
+//     description: Joi.string().allow(''),
+// });
 
 const router = express.Router()
 
@@ -51,9 +54,13 @@ router.use('/:recordId', (req, res, next) => {
 
 
 router.get('/', async (req, res, next)=> {
-    const records = await RecordModel.find({});
-    res.send(records);
+    // const records = await RecordModel.find({});
+    // res.send(records);
+    const user = await UserModel.findById(userId);
+    console.log(user);
+    res.send(user.records);
 });
+
 router.post('/', async (req, res, next)=> {
     const body = req.body;
     // Validate
@@ -70,11 +77,24 @@ router.post('/', async (req, res, next)=> {
     //     ...body,
     // };
 
-    const newRecord = new RecordModel({
-        ...body
-    });
+        // const newRecord = new RecordModel({
+        //     ...body
+        // });
 
-    const errors = await newRecord.validateSync();
+        // const errors = await newRecord.validateSync();
+        // if(errors) {
+        //     const errorFieldNames= Object.keys(errors.errors);
+        //     if (errorFieldNames.length > 0) {
+        //         return res.status(400).send(errors.errors[errorFieldNames[0]].message);
+        //     }
+        // };
+
+        // await newRecord.save();
+    // records.push(newRecord);
+    const user = await UserModel.findById(userId);
+    user.records.push(body);
+
+    const errors = await user.validateSync();
     if(errors) {
         const errorFieldNames= Object.keys(errors.errors);
         if (errorFieldNames.length > 0) {
@@ -82,9 +102,9 @@ router.post('/', async (req, res, next)=> {
         }
     };
 
-    await newRecord.save();
-    // records.push(newRecord);
-    return res.status(201).send(newRecord);
+    await user.save();
+
+    return res.status(201).send(user.records);
 });
 router.get('/:recordId', (req, res, next)=> {
     const recordID = req.params.recordId;
