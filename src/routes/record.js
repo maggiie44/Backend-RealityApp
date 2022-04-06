@@ -43,21 +43,24 @@ const router = express.Router()
 //     },
 // ]
 
-router.use('/:recordId', (req, res, next) => {
-    const foundRecord = RecordModel.findById(req.params.recordId);
-    if (!foundRecord) {
-      return res.status(404).send('Record not found');
-    };
-    req.record = foundRecord;
-    return next();
-});
+// router.use('/:recordId', async (req, res, next) => { 
+//     const user = await UserModel.findById(userId);
+//     user.records.indexOf('')
+//     const foundRecord = RecordModel.findById(req.params.recordId);
+    
+
+//     if (!foundRecord) {
+//       return res.status(404).send('Record not found');
+//     };
+//     req.record = foundRecord;
+//     return next();
+// });
 
 
 router.get('/', async (req, res, next)=> {
     // const records = await RecordModel.find({});
     // res.send(records);
     const user = await UserModel.findById(userId);
-    console.log(user);
     res.send(user.records);
 });
 
@@ -106,35 +109,56 @@ router.post('/', async (req, res, next)=> {
 
     return res.status(201).send(user.records);
 });
-router.get('/:recordId', (req, res, next)=> {
-    const recordID = req.params.recordId;
-    const index = records.findIndex((record) => record.__id === recordID);
-    const foundRecord = records[index];
-    if (!(foundRecord)) {
-        return res.status(404).send('Record not found');
-    }
-    return res.send(foundRecord);
-});
-router.put('/:recordId', (req, res, next)=> {
+// router.get('/:recordId', (req, res, next)=> {
+//     const recordID = req.params.recordId;
+//     const index = records.findIndex((record) => record.__id === recordID);
+//     const foundRecord = records[index];
+//     if (!(foundRecord)) {
+//         return res.status(404).send('Record not found');
+//     }
+//     return res.send(foundRecord);
+// });
+router.put('/:recordId', async (req, res, next)=> {
     const body = req.body;
 
-    // validate
-    const validateResult = updateRequestSchema.validate(body);
-    if (validateResult.error) {
-      // failed validation
-      return res.status(400).send('Invalid request');
-    }
+    // // validate
+    // const validateResult = updateRequestSchema.validate(body);
+    // if (validateResult.error) {
+    //   // failed validation
+    //   return res.status(400).send('Invalid request');
+    // }
   
-    const updatedRecord = {
-      ...req.record,
-      ...body,
-    };
-    records[req.recordIndex] = updatedRecord;
-    return res.status(201).send(updatedRecord);
+    // const updatedRecord = {
+    //   ...req.record,
+    //   ...body,
+    // };
+    // records[req.recordIndex] = updatedRecord;
+
+    const user = await UserModel.findById(userId);
+    console.log(body);
+    const updatedRecord = await user.records.map((record) => {
+        if(record._id.toString() === req.params.recordId) {
+            return record = body
+        };
+        return record
+    });
+    console.log(updatedRecord); 
+    user.records = updatedRecord;
+    await user.save();
+    return res.status(201).send(updatedRecord.records);
 });
 router.delete('/:recordId', async (req, res, next)=> {
-    await RecordModel.deleteOne({__id: req.params.recordId})
-    return res.status(204).send(); // 204 = No content which mean it successfully removed
+    // await RecordModel.deleteOne({__id: req.params.recordId})
+    const user = await UserModel.findById(userId);
+    // console.log(req.params.recordId);
+    const updateRecords = user.records.filter((record) => {
+        console.log(record._id.toString() !== req.params.recordId);
+        return record._id.toString() !== req.params.recordId
+    });
+    user.records = updateRecords;
+    console.log(user.records);
+    await user.save();
+    return res.status(204).send(user.records);
 });
 
 module.exports = router;

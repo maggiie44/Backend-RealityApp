@@ -5,15 +5,15 @@ const userSchema = new mongoose.Schema(
         username: {type: String,
                     required: [true, 'Username required']},
         password: {type: String, 
-                   min: [8, 'Password must be at least 8 charecters'], 
-                   max: [16, 'Password must be at most 16 charecters'],
+                   min: [8, 'Password must be at least 8 characters'], 
+                   max: [16, 'Password must be at most 16 characters'],
                    validate: {
                     validator: function(v) {
                         // (?=.*\d) = checks if a digit exists using a positive lookahead., (?=.*[a-z]) = check a lower-case, 
                         // (?=.*[A-Z]) = check a upper-case, (?=.*[0-9]) = check a number, .{8,16} = Min 8 max 16
                       return /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,16}/.test(v);
                     },
-                    message: `Password must be contain lower charecter, capital charecter and number!`
+                    message: `Password must be contain lower character, capital character and number!`
                     },
                    required: [true, 'Password required'],
         },
