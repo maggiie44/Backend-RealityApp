@@ -43,18 +43,22 @@ const router = express.Router()
 //     },
 // ]
 
-// router.use('/:recordId', async (req, res, next) => { 
-//     const user = await UserModel.findById(userId);
-//     user.records.indexOf('')
-//     const foundRecord = RecordModel.findById(req.params.recordId);
-    
+router.use('/:recordId', async (req, res, next) => { 
+    const user = await UserModel.findById(userId);
+    const checkedRecords = user.records.filter((record) => {
+        return record._id.toString() === req.params.recordId
+    });
+    if (!(checkedRecords.length === 1)) {
+        return res.status(404).send('Record not found');
+    };
 
-//     if (!foundRecord) {
-//       return res.status(404).send('Record not found');
-//     };
-//     req.record = foundRecord;
-//     return next();
-// });
+    // const foundRecord = RecordModel.findById(req.params.recordId);   
+    // if (!foundRecord) {
+    //   return res.status(404).send('Record not found');
+    // };
+    // req.record = foundRecord;
+    return next();
+});
 
 
 router.get('/', async (req, res, next)=> {
