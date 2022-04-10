@@ -4,7 +4,7 @@ const Joi = require('joi');
 const RecordModel = require('../models/record');
 const UserModel = require('../models/userModel');
 
-const userId = '624c1385419c27f8b3217645';
+// const userId = '624c1385419c27f8b3217645';
 
 // const createRequestSchema = Joi.object( {
 //     activityName: Joi.string().required(),
@@ -44,6 +44,7 @@ const router = express.Router()
 // ]
 
 router.use('/:recordId', async (req, res, next) => { 
+    const userId = req.user.id;
     const user = await UserModel.findById(userId);
     const checkedRecords = user.records.filter((record) => {
         return record._id.toString() === req.params.recordId
@@ -69,6 +70,7 @@ router.get('/', async (req, res, next)=> {
 });
 
 router.post('/', async (req, res, next)=> {
+    const userId = req.user.id;
     const body = req.body;
     // Validate
     // const validResult = createRequestSchema.validate(body);

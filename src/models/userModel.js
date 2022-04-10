@@ -17,11 +17,20 @@ const userSchema = new mongoose.Schema(
                     },
                    required: [true, 'Password required'],
         },
-        displayName: String,
-        aboutMe: String,
-        favorite: String,
-        durationGoal: {type: Number, min: [0, 'Duration Goal must be at least 0']},
-        caloriesGoal: {type: Number, min: [0, 'Calories Goal must be at least 0']},
+        displayName: {
+            type: String,
+            default: ''
+        },
+        aboutMe: {
+            type: String,
+            default: ''
+        },
+        favorite: {
+            type: String,
+            default: ''
+        },
+        durationGoal: {type: Number, min: [0, 'Duration Goal must be at least 0'], default: 0},
+        caloriesGoal: {type: Number, min: [0, 'Calories Goal must be at least 0'], default: 0},
         records: [{
             activityName: { type: String, minlength: [3, 'Activity name should contains at least 3 char']},
             timestamp: {type : Date},
