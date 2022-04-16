@@ -2,7 +2,7 @@ const UserModel = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const passport = require("passport");
 
-exports.regiterUser = (req, res) => {
+exports.registerUser = (req, res) => {
   UserModel.findOne({ username: req.body.username }, async (err, doc) => {
     if (err) throw err;
     if (doc) res.send("User Already Exists");

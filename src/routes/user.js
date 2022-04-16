@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.use('/me/records', recordRouter);
 
-router.post("/register", userAuthController.regiterUser);
+router.post("/register", userAuthController.registerUser);
 router.post("/login", userAuthController.loginUser);
 router.delete('/logout', userAuthController.logoutUser)
 
