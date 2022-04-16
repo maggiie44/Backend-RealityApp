@@ -26,14 +26,17 @@ exports.updateRecord = async (req, res)=> {
     const userId = req.user.id;
     const body = req.body;
     const user = await UserModel.findById(userId);
-    console.log(body);
     const updatedRecord = await user.records.map((record) => {
         if(record._id.toString() === req.params.recordId) {
-            return record = body
+            record.activityName = body.activityName;
+            record.timestamp = body.timestamp;
+            record.duration = body.duration;
+            record.calories = body.calories;
+            record.description = body.description;
+            return record
         };
         return record
     });
-    console.log(updatedRecord); 
     user.records = updatedRecord;
     await user.save();
     return res.status(201).send(updatedRecord.records);
@@ -43,11 +46,19 @@ exports.deleteRecord = async (req, res)=> {
     const userId = req.user.id;
     const user = await UserModel.findById(userId);
     const updateRecords = user.records.filter((record) => {
-        console.log(record._id.toString() !== req.params.recordId);
+
         return record._id.toString() !== req.params.recordId
     });
     user.records = updateRecords;
-    console.log(user.records);
     await user.save();
     return res.status(204).send(user.records);
+};
+
+exports.getRecordByID = async (req, res)=> {
+    const userId = req.user.id;
+    const user = await UserModel.findById(userId);
+    const RecordbyID = user.records.filter((record) => {
+        return record._id.toString() === req.params.recordId
+    });
+    res.send(RecordbyID);
 };
