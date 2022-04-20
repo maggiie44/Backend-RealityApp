@@ -1,38 +1,39 @@
 require("dotenv").config();
 const mongoose = require('mongoose');
-const express = require('express');
-const cors = require('cors');
-const passport = require('passport');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const bodyParser = require('body-parser');
+const app = require('../api/index')
+// const express = require('express');
+// const cors = require('cors');
+// const passport = require('passport');
+// const cookieParser = require('cookie-parser');
+// const session = require('express-session');
+// const bodyParser = require('body-parser');
 
-const userRouter = require('./routes/user');
+// const userRouter = require('./routes/user');
 
-const app = express();
+// const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: "http://localhost:3000", 
-    credentials: true,
-  })
-);
-app.use(
-  session({
-    secret: "secretcode",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
-app.use(cookieParser("secretcode"));
-app.use(passport.initialize());
-app.use(passport.session());
-require("./passports/passportConfig")(passport);
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000", 
+//     credentials: true,
+//   })
+// );
+// app.use(
+//   session({
+//     secret: "secretcode",
+//     resave: true,
+//     saveUninitialized: true,
+//   })
+// );
+// app.use(cookieParser("secretcode"));
+// app.use(passport.initialize());
+// app.use(passport.session());
+// require("./passports/passportConfig")(passport);
 
 
-app.use('/users', userRouter);
+// app.use('/users', userRouter);
 
 const boot = async () => {
     const URI = 'mongodb+srv://' + process.env.MONGO_USERNAME + ':' + process.env.PASSWORD + '@' + process.env.PROJECT_NAME + '.mongodb.net/' + process.env.DATABASE_NAME + '?retryWrites=true&w=majority'
