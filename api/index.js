@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const userRouter = require('../src/routes/user');
 
 const app = express();
+app.set("trust proxy", 1);
 
 if (true) {
   app.use(async (req, res, next) => {
