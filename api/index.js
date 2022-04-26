@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: "https://kunanon-reality-app.vercel.app",
-    // origin: "http://localhost:3000",  
+    origin: "http://localhost:3000",  
     credentials: true,
   })
 );
