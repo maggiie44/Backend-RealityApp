@@ -39,9 +39,9 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {secure: true, httpOnly: true, sameSite:"none"},
-    store: MongoStore.create({
-      mongoUrl: 'mongodb+srv://' + process.env.MONGO_USERNAME + ':' + process.env.PASSWORD + '@' + process.env.PROJECT_NAME + '.mongodb.net/' + process.env.DATABASE_NAME + '?retryWrites=true&w=majority'
-    })
+    // store: MongoStore.create({
+    //   mongoUrl: 'mongodb+srv://' + process.env.MONGO_USERNAME + ':' + process.env.PASSWORD + '@' + process.env.PROJECT_NAME + '.mongodb.net/' + process.env.DATABASE_NAME + '?retryWrites=true&w=majority'
+    // })
   })
 );
 app.use(cookieParser("secretcode"));
