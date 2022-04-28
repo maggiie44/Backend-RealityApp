@@ -6,6 +6,7 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const MongoStore = require("connect-mongo");
 
 const userRouter = require('../src/routes/user');
 
@@ -35,8 +36,12 @@ app.use(
 app.use(
   session({
     secret: "secretcode",
-    resave: true,
+    resave: false,
     saveUninitialized: true,
+    cookie: {secure: true, httpOnly: true, sameSite:"none"},
+    store: MongoStore.create({
+      mongoUrl: 'mongodb+srv://' + process.env.MONGO_USERNAME + ':' + process.env.PASSWORD + '@' + process.env.PROJECT_NAME + '.mongodb.net/' + process.env.DATABASE_NAME + '?retryWrites=true&w=majority'
+    })
   })
 );
 app.use(cookieParser("secretcode"));
